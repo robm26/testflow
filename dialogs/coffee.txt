@@ -1,0 +1,4 @@
+LaunchRequest
+CoffeeIntent
+AMAZON.YesIntent
+AMAZON.YesIntent

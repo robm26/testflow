@@ -1,2 +1,128 @@
 # testflow
-Command line testing tool for Alexa skill code that simulates multi turn conversations, allows interactive inputs, and provides concise, colorful output.
+A command-line testing tool for Alexa skill code that simulates multi turn conversations, allows interactive inputs, and provides concise, colorful output.
+
+Developers seek to stay in the "Flow", a mental state where they are able to design and code rapidly.
+This tool is designed to streamline and simplify the development process for complex skill.
+
+### Overview
+Are you developing a conversational skill?  Maybe you are building a game, or a questionnaire, that requires several steps.
+You may have seen how session attributes are set and recalled to allow the skill to remember things and give context to Yes and No answers.
+
+A skill may prompt the user for inputs early in the conversation, store the responses in session attributes, and use the values to look up data or perform an action.
+Game skills will keep track of user names, current scores, high scores, etc.
+As a developer, in order to visualize the state of session attributes throughout a long skill session, it helps to be able to run a pre-defined sequence of events and observe everything that is happening at each stage.
+Often it is difficult to visualize how your skill behaves as a "state machine" through many sequences of events.
+It is taxing if you need to scour through log files or big JSON blocks like a detective, while simultaneously playing the role of the end user to execute the skill.
+For example, imagine a quiz game with ten questions.  If you need to debug an issue with how the final score is calculated, you would have to manually invoke the quiz, step by step, until you reach the final state.
+
+With Testflow, you can automate all ten answers, and have the option to pause the test sequence so you can type in a custom slot value, for example to test the quiz skill where the correct answer depends on a random question Alexa asks the user.
+
+
+### Note:
+Testflow is designed for human developers, and not for DevOps, CI/CD or as part of a build pipeline.
+Testflow runs on your laptop; it requires no Internet connection, and is perfect for developing while on a plane.
+It simply executes your Node.JS project (a local version of your Lambda code) with a sequence of events.
+
+Testflow is not tied to ASK SDK V2.
+It treats your code project like a black box, by simply sending in test events.
+Your code can be running alexa-sdk V1, ask-sdk V2, or no SDK at all.
+
+
+<img src="https://m.media-amazon.com/images/G/01/cookbook/testflow_default._TTH_.png" alt="TestFlow" width="411" height="245">
+
+**```testflow.js```** is itself a Node.JS Javascript script designed to be run from the command line.  The script will access two other files:
+ * Your ```src/index.js``` skill source code
+ * A dialog sequence file, such as  ```dialogs/breakfast.txt```
+
+
+#### Dialog Sequence File
+Define a text file with your skill's input events.
+Put one Request or Intent per line.  This corresponds to each of the Intent requests your code expects to receive from the Alexa service.
+
+For example: *dialogs/default.txt*
+
+```
+LaunchRequest
+AMAZON.HelpIntent
+AMAZON.StopIntent
+```
+
+Another example: *dialogs/staterequest.txt*
+
+```
+LaunchRequest
+StateRequestIntent usstate=Vermont
+StateRequestIntent usstate=New%20York
+ISeeIntent animal=bear color=brown
+# AMAZON.HelpIntent
+AMAZON.StopIntent
+MyNameIsIntent myName=
+MyNameIsIntent myName=Madeline
+? StateRequestIntent usstate=Texas
+RecapIntent
+AMAZON.StopIntent
+```
+
+ * Notice that slot values with spaces need to be encoded.  Just insert ```%20``` to replace any white spaces, such as in ```usstate=New%20York```
+ * You can prompt the user to confirm, or type in, a slot value by adding a leading ```? ``` to your Intent
+ * You can comment out a line with a pound #
+
+#### Running tests
+
+1. Type ```node testflow```
+  + You should see requests and responses for each of the default request types
+1. Type ```node testflow breakfast.txt```
+  + You should see request and Intents, slot values, session attributes, and output speech.
+
+
+<img src="https://m.media-amazon.com/images/G/01/cookbook/testflow1._TTH_.png" alt="TestFlow" width="346" height="288">
+
+
+#### Customizing the output
+At the top of the ```testflow.js``` file, notice a set of options you can define.
+You may change any of these to ```true``` or ```false```.
+
+```javascript
+const options = {
+
+    delay        : 1.0,    // delay N seconds between requests
+
+    stdout       : false,  // console.log() messages or errors, shown in white
+
+    speechOutput : true,  // the cyan text you hear the Echo say
+
+    reprompt     : false, // The reprompt in case the user does not answer
+
+    attributes   : true,  // session.attributes shown in magenta
+                          // You can also name one particular attribute to watch instead of the boolean
+
+    slots        : true,  // key/value pairs shown in blue and green
+                          // For Entity Resolution enter a pair such as red/red or crimson/red
+
+    requestEvent : false, // the request JSON sent to your code
+
+    cards        : false, // Display simple card title and text
+
+    userId       : '123',  // Define the final 3 chars of the user Id, can be overridden
+
+    timestamp    : ''      // defaults to Now, can set via '2018-04-23T21:47:49Z'
+
+};
+```
+#### AWS Calls
+If your code makes calls to AWS Services such as S3 or DynamoDB, you should be able to test these from your local command prompt, too.
+Be sure you have the [AWS-SDK](./tutorial/SETUP.md) installed and the AWS CLI (command line interface) [installed](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configured](https://developer.amazon.com/blogs/post/Tx1UE9W1NQ0GYII/publishing-your-skill-code-to-lambda-via-the-command-line-interface).
+You can even have your skill point to a [local endpoint](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) of DynamoDB for offline testing.
+
+
+#### Installation Steps
+The setup instructions are found here: [tutorial/SETUP.md](./tutorial/SETUP.md)
+
+#### Tutorial
+A tutorial is available at: [tutorial/TUTORIAL.md](./tutorial/TUTORIAL.md) that shows off additional features.
+
+#### Feedback
+Feedback is appreciated!  Please create a Github Issue or Pull Request (above) to report problems or suggest enhancements.
+Follow me at @robmccauley
+
+

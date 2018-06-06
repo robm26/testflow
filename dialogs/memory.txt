@@ -1,0 +1,13 @@
+LaunchRequest
+MyColorGetIntent
+BookmarkGetIntent
+MyColorSetIntent color=red
+BookmarkSetIntent page=28
+AMAZON.StopIntent
+end
+LaunchRequest
+BookmarkGetIntent
+ResetIntent
+AMAZON.YesIntent
+BookmarkGetIntent
+AMAZON.StopIntent

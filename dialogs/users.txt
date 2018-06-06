@@ -1,0 +1,17 @@
+~ 222
+LaunchRequest
+MyColorSetIntent color=green
+AMAZON.StopIntent
+
+~ 333
+LaunchRequest
+MyColorSetIntent color=yellow
+AMAZON.StopIntent
+
+~ 222
+LaunchRequest
+MyColorGetIntent
+
+~ 333
+LaunchRequest
+MyColorGetIntent
