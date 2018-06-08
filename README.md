@@ -4,6 +4,14 @@ A command-line testing tool for Alexa skill code that simulates multi turn conve
 Developers seek to stay in the "Flow", a mental state where they are able to design and code rapidly.
 This tool is designed to streamline and simplify the development process for complex skill.
 
+### New Features
+ * Entity Resolution slots
+ * Time dimension
+ * Multiple users
+ * Python projects
+
+See the [TUTORIAL](./tutorial/TUTORIAL.md)
+
 ### Overview
 Are you developing a conversational skill?  Maybe you are building a game, or a questionnaire, that requires several steps.
 You may have seen how session attributes are set and recalled to allow the skill to remember things and give context to Yes and No answers.
@@ -87,8 +95,6 @@ const options = {
 
     delay        : 1.0,    // delay N seconds between requests
 
-    stdout       : false,  // console.log() messages or errors, shown in white
-
     speechOutput : true,  // the cyan text you hear the Echo say
 
     reprompt     : false, // The reprompt in case the user does not answer
@@ -116,13 +122,13 @@ You can even have your skill point to a [local endpoint](https://docs.aws.amazon
 
 
 #### Installation Steps
-The setup instructions are found here: [tutorial/SETUP.md](./tutorial/SETUP.md)
+The setup instructions are found here: [SETUP](./tutorial/SETUP.md)
 
 #### Tutorial
-A tutorial is available at: [tutorial/TUTORIAL.md](./tutorial/TUTORIAL.md) that shows off additional features.
+A tutorial is available at: [TUTORIAL](./tutorial/TUTORIAL.md) that shows off additional features.
 
 #### Feedback
 Feedback is appreciated!  Please create a Github Issue or Pull Request (above) to report problems or suggest enhancements.
-Follow me at @robmccauley
+Follow me at [@robmccauley](https://twitter.com/robmccauley)
 
 

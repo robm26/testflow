@@ -4,10 +4,11 @@
 //
 // node testflow
 // node testflow mydialog.txt
-
-
 const fs = require("fs");
-const MyLambdaFunction = require('./sampleskill2/index.js'); // Your Lambda source with exports.handler
+
+const SourceCodeFile = './sampleskill/index.js';
+const handlerName =  'handler'; //'lambda_handler'
+
 
 let MyDialog = './dialogs/default.txt';
 
@@ -17,10 +18,9 @@ if (process.argv[2]) {
 
 // Toggle on or off various debugging outputs
 const options = {
-
-    delay        : 0.5,     // seconds between requests
+    delay        : 1.5,     // seconds between requests
     stdout       : true,    // standard output, show any errors or console.log() messages
-    attributes   : 'favoriteColor',   // true, false, or a string with the name of an attribute such as 'history'
+    attributes   : true,   // true, false, or a string with the name of an attribute such as 'history'
     speechOutput : true,
     reprompt     : false,
     slots        : true,
@@ -35,11 +35,18 @@ if (options.timestamp === '') {
 }
 
 let userId = options.userId;
-let runTime = new Date();
-
 
 const appId = 'amzn1.echo-sdk-ams.app.1234';  // set this to match your skill's alexa.appId to remove warnings
 const locale = 'en-US';
+
+let MyLambdaFunction;
+let SourceLang = 'javascript';
+if (SourceCodeFile.slice(-2).toLowerCase()  === 'py') {
+    SourceLang = 'python';
+} else {
+    MyLambdaFunction = require(SourceCodeFile); // Your Lambda source with exports.handler
+}
+
 
 console.log();
 // console.log('================================================================================');
@@ -55,7 +62,6 @@ let current_line = 1;
 let lineArray = [];
 let Intent = '';
 let prompt = false;
-let ses = false; // shoud end session
 let newSession = true;
 let userIdLast3 = options.userId;
 let timeOffset = '0m'; // run test by adding a span, time formats like 3m, 3h, or 3d
@@ -71,7 +77,7 @@ let context = { // lambda functions may finish by calling context.succeed OR the
             sa = data.sessionAttributes;  // for next time
         }
 
-        let textToSay = data.response.outputSpeech.ssml;
+        let textToSay = data.response.outputSpeech.ssml || data.response.outputSpeech.text;
 
         textToSay = textToSay.replace('<speak>', '    ');
         textToSay = textToSay.replace('</speak>', '');
@@ -253,6 +259,8 @@ function runSingleTest(myLineArray, currentLine, sa) {
         request =  {
             "type": requestType,
             "locale": locale,
+            "requestId": "amzn1.echo-api.request.90e15a67-dd2d-4cf2-93bd-7a1234d0139f",
+            "shouldLinkResultBeReturned": false,
             "timestamp":  eventTime // options.timestamp
         };
 
@@ -336,6 +344,8 @@ function processArray(arr, cb) {  // process multiple slots as array
         let req =  {
             "type": "IntentRequest",
             "timestamp": eventTime, // options.timestamp
+            "requestId": "amzn1.echo-api.request.90e15a67-dd2d-4cf2-93bd-7a1234d0139f",
+            "shouldLinkResultBeReturned": false,
             "intent": {
                 "name": Intent,
                 "slots" : slotObj
@@ -411,19 +421,64 @@ function prepareTestRequest(sa, newSession, request){
     // console.log('***** request:\n'+ JSON.stringify(request, null, 2));
 
     // call the function
+    if (SourceLang === 'javascript') {
 
-    if (options.stdout) {
-        MyLambdaFunction['handler'] (eventJSON, context, callback);
+        if (options.stdout) {
 
-    }  else {
+            MyLambdaFunction[handlerName] (eventJSON, context, callback);
 
-        console.log = function() {};
+        }  else {
+            console.log = function() {};
+            MyLambdaFunction[handlerName] (eventJSON, context, callback);
+            console.log = OriginalConsoleLog;
+        }
 
-        MyLambdaFunction['handler'] (eventJSON, context, callback);
+    } else {  // PYTHON
 
-        console.log = OriginalConsoleLog;
+        let sourcePath = SourceCodeFile.substring(0, SourceCodeFile.lastIndexOf("/"));
+        let sourceFileName = SourceCodeFile.substring(SourceCodeFile.lastIndexOf("/") + 1, SourceCodeFile.length - 3);
+
+        // console.log('sourcePath ' + sourcePath);
+        // console.log('sourceFileName ' + sourceFileName);
+        // sys.path.insert(0, '/path/to/application/app/folder')
+
+        let spawn = require("child_process").spawn;
+        const pycodeArray = [
+            'import json, sys',
+            'sys.path.insert(0, \'' + sourcePath + '\')',
+            'from ' + sourceFileName + ' import ' + handlerName ,
+            'sys.stdout.write(\'{"stdout":"\')',
+            'response = lambda_handler(json.loads(\'' + JSON.stringify(eventJSON) + '\'), "")',
+            'sys.stdout.write(\'","body":\')',
+            'sys.stdout.write(json.dumps(response))',
+            'sys.stdout.write(\'}\')'
+            //,'sys.stdout.flush()'
+        ];
+
+        let pyCommands = '';
+
+        for (let i = 0; i < pycodeArray.length; i++) {
+            pyCommands += pycodeArray[i] + '\n\n'
+        }
+
+        let pythonProcess = spawn('python',["-c", pyCommands]);
+
+        pythonProcess.stdout.on('data', function (data){
+
+            const responseraw = '' + data;
+
+            const responseJSON = responseraw.replace(/\n/g, "\\n");
+
+            const responseJSONobj = JSON.parse(responseJSON);
+            const stdout = JSON.stringify(responseJSONobj.stdout, null, 2).replace(/\\n/g, "\n");
+            const responseBody = responseJSONobj.body;
+            if (options.stdout) {
+                console.log(stdout.substr(1).slice(0, -1));
+            }
+            context.succeed(responseBody);
+
+        });
     }
-
 }
 
 function promptForSlot(prompt, slotname, slotvalue, callback) {
@@ -466,9 +521,7 @@ function callback(error, data) {
     if(error) {
         console.log('error: ' + error);
     } else {
-        // console.log('^^^^^^^ CALL ME BACK');
         context.succeed(data);
-        //console.log(data);
     }
 };
 

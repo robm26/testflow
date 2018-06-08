@@ -2,7 +2,7 @@
 
 Welcome!  This guide will walk you through all the features of Testflow using two included sample skill projects.
 
-First, be sure Testflow is installed: see [SETUP.md](./tutorial/SETUP.md)
+First, be sure Testflow is installed: see [SETUP.md](./SETUP.md)
 
 We will be testing against the two included skill code projects in [sampleskill](../sampleskill) and [sampleskill2](../sampleskill2)
 
@@ -142,17 +142,59 @@ LaunchRequest
 AMAZON.StopIntent
 ```
 
-
 ### Different Users
+Now try ```node testflow colorusers.txt```
+
+Your published skill will be used by multiple users, each with a unique userId.
+Testflow can vary the userId to simulate different user sessions.  The ```userId``` field's
+last three characters can be set via a directive in the dialog sequence file.
+
+```
+~ 111
+LaunchRequest
+AMAZON.StopIntent
+~ 222
+LaunchRequest
+AMAZON.StopIntent
+~ 333
+LaunchRequest
+AMAZON.StopIntent
+```
+
+### Python
+Testflow supports testing Python code as well as Node.JS.
+The tool checks the extension of your source file, either .js or .py.
+For Python projects, a child process is spawned that executes the tests via Python.exe -c commands.
+Within testflow.js, search for // PYTHON to see the this code.
+
+
+Open up testflow.js and modify the location of your Python handler as shown here:
+
+```
+const SourceCodeFile = './sampleskill3/src/index.py';
+const handlerName =  'lambda_handler';
+```
+
+Now try ```node testflow colorusers.txt```
 
 
 
+### DynamoDB Local
+If your skill uses Persistent attributes and DynamoDB,
+you would need to have Internet access to AWS for Testflow to run your skill properly.
 
-  * AWS Services
-    * DynamoDB
-* Time shift
-* Multiple userId
+However, you could [setup a local instance of DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html),
+for enabling offline testing (like when traveling).
 
+Then, modify your code to define a new local DynamoDB client and specify it in your skill handler:
 
-
-https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
+```
+const localDynamoClient = new AWS.DynamoDB({apiVersion : 'latest', endpoint : 'http://localhost:8000'});
+...
+exports.handler = skillBuilder
+    .addRequestHandlers(
+    ...
+    )
+.withTableName(DYNAMODB_TABLE)
+.withDynamoDbClient(localDynamoClient)
+```

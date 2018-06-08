@@ -21,10 +21,14 @@
 
 The test project is ready to run, however you can review or update configuration settings defined in the testflow.js file.
 1. Open ```testflow.js``` in your favorite text editor
-1. Review the path referenced by ```MyLambdaFunction```, it currently points to an included sample project
+1. Review ```SourceCodeFile``` and ```handlerName``` values.
+These currently point to an included sample project source file and function.  Adjust these as necessary.
+
 ```
-const MyLambdaFunction = require('./sampleskill/index.js');
+const SourceCodeFile = './sampleskill/index.js';
+const handlerName =  'handler'; // 'lambda_handler'
 ```
+
 1. Notice the folder ```/dialogs``` which contains dialog sequence files.
 The default dialog file is called default.txt but you can override this when executing a command.
 ```
