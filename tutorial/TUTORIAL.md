@@ -4,7 +4,10 @@ Welcome!  This guide will walk you through all the features of Testflow using tw
 
 First, be sure Testflow is installed: see [SETUP.md](./SETUP.md)
 
-We will be testing against the two included skill code projects in [sampleskill](../sampleskill) and [sampleskill2](../sampleskill2)
+We will be testing against the two included Node.JS sample skill code projects in
+[sampleskill](../sampleskill) and
+[sampleskill2](../sampleskill2) and the Python project in
+[sampleskill3](../sampleskill3)
 
 Open up the testflow project folder in your favorite code editor or text editor.
 We will be modifying ```testflow.js```, the code at ```skillsample/index.js```, and the sequence text files within ```/dialogs/```.
@@ -171,7 +174,7 @@ Within testflow.js, search for // PYTHON to see the this code.
 Open up testflow.js and modify the location of your Python handler as shown here:
 
 ```
-const SourceCodeFile = './sampleskill3/src/index.py';
+const SourceCodeFile = './sampleskill3/index.py';
 const handlerName =  'lambda_handler';
 ```
 
