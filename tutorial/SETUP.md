@@ -8,14 +8,14 @@
 
 **Recommended**
 * [Git](https://git-scm.com/downloads) for cloning this project
-* [AWS CLI](https://aws.amazon.com/cli/) for zipping and deploying your project to AWS Lambda.
+* [AWS CLI](https://aws.amazon.com/cli/) or [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html) for zipping and deploying your project to AWS Lambda.
 
 ### Clone repository
 
 1. Clone this repository to your laptop:
   * Open a command prompt (black background is best)
   * Type ```git clone https://github.com/robm26/testflow```
-  * Or, download and extract the repository from the green button on the [project home page](../).
+  * Or, download and extract the repository from the green button on the [project home page](../README.md).
 
 ### Configure
 
@@ -71,4 +71,4 @@ You can copy testflow into your own project folder.
 1. Run from the command line: ```node testflow mytest.txt```
 
 ### Learn
-Follow the tutorial to learn more! [tutorial/TUTORIAL.md](./TUTORIAL.md)
+Follow the tutorial to learn more! [TUTORIAL](./TUTORIAL.md)

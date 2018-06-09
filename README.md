@@ -23,7 +23,7 @@ In order to try the feature out, they
 1. Get an error
 1. Return to the AWS browser tab and click CloudWatch
 1. Open the latest log file and refresh it
-1. Hunt for an console.log() message
+1. Hunt for a console.log() message
 1. Consider how this status message illuminates the code they were developing 60 seconds prior
 1. Return to developing
 
@@ -62,7 +62,7 @@ It treats your code project like a black box, by simply sending in test events.
 Your code can be running alexa-sdk V1, ask-sdk V2, or no SDK at all.
 
 
-**```testflow.js```** is itself a Node.JS Javascript script designed to be run from the command line.  The script will access two other files:
+**```testflow.js```** is itself a single Node.JS Javascript script designed to be run from the command line.  The script will access two other files:
  * Your ```src/index.js``` skill source code
  * A dialog sequence file, such as  ```dialogs/breakfast.txt```
 

@@ -122,6 +122,8 @@ It is recommended to avoid logging if possible, and add logs when necessary for 
 
 1. Run ```node testflow coffee.txt```
 
+<img align="right" width="149" height="82" src="https://s3.amazonaws.com/skill-images-789/tf/comment.png">
+
 1. Notice the final line is an AMAZON.YesIntent, but the skill doesn't understand.
   * The skill has ended with the first YES.  You can see double-dashed lines (=====) indicating the skill session has ended.
 The next YES is running under a brand new session.
@@ -129,7 +131,7 @@ The next YES is running under a brand new session.
 
 1. You could also insert a new line with just the word ```end``` in order to skip any remaining lines.
 
-<img align="right" width="298" height="164" src="https://s3.amazonaws.com/skill-images-789/tf/comment.png">
+
 
 
 ---
@@ -163,6 +165,9 @@ to grant your CLI user (and Lambda role) access to DynamoDB, for example by atta
 ---
 
 ### Attributes
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Color.gif">
+
 1. Set the following options to false:
 
 ```
@@ -177,7 +182,7 @@ options.slots
 options.attributes
 ```
 
-   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Color.gif">
+
 
 1. Run ```node testflow color.txt```
 
@@ -189,9 +194,9 @@ Let's focus in on that attribute only.  The options.attributes can be set to mor
 ---
 
 ### Entity Resolution Slots
-Now try ```node testflow colorsynonym.txt```
-
    <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/ColorSynonym.gif">
+
+Now try ```node testflow colorsynonym.txt```
 
 In your skill's language model you can define a custom slot with just a list of your own values.
 In this simple case, your code would receive a slot value (or null) as part of the Intent.
@@ -298,12 +303,15 @@ AMAZON.StopIntent
 ---
 
 ### Sample Skill 3 - Python
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/PythonDemo.gif">
+
 Testflow supports testing Python code as well as Node.JS.
 The tool checks the extension of your source file, either .js or .py.
 For Python projects, a child process is spawned that executes the tests via ```Python.exe -c``` commands.
 This feature was tested with Python 2.7.
 
-   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/PythonDemo.gif">
+
 
 Within testflow.js, search for // PYTHON to see the this code.
 
