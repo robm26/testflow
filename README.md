@@ -4,20 +4,43 @@ A command-line testing tool for Alexa skill code that simulates multi turn conve
 Developers seek to stay in the "Flow", a mental state where they are able to design and code rapidly.
 This tool is designed to streamline and simplify the development process for complex skill.
 
-
-### New Features
- * Entity Resolution slots
- * Time dimension
- * Multiple users
- * Python projects
+#### New Features
+ * _Entity Resolution slots, Time dimension, simulating multiple unique users, testing Node.JS and Python projects_
 
 See the [TUTORIAL](./tutorial/TUTORIAL.md)
+
+<img src="https://m.media-amazon.com/images/G/01/cookbook/testflow_default._TTH_.png" alt="TestFlow" width="411" height="245">
+
+### The Problem
+Today many developers work on their skills in an interrupted fashion.
+Imagine a developer deep in the coding flow and adding a nifty new feature.
+In order to try the feature out, they
+1. Zip their code project into a package
+1. Upload the package to AWS Lambda
+1. Launch the skill (on an Echo or by re-logging into the Developer portal)
+1. Listen to the skill's welcome message
+1. Ask a question or questions
+1. Get an error
+1. Return to the AWS browser tab and click CloudWatch
+1. Open the latest log file and refresh it
+1. Hunt for an console.log() message
+1. Consider how this status message illuminates the code they were developing 60 seconds prior
+1. Return to developing
+
+
+With Testflow, the development process is simplified.  Once you add a new feature to your code, you can:
+1. (Update a ```dialog.txt``` file with the series of Intents (& Slots) you wish to test)
+1. Alt-Tab to your command prompt
+1. Type ```node testflow``` and watch the conversation unfold
+1. Review the speechOutput, sessionAttributes, card, errors and debug messages; in a concise colorful summary
+1. Alt-Tab and return to developing
+
 
 ### Overview
 Are you developing a conversational skill?  Maybe you are building a game, or a questionnaire, that requires several steps.
 You may have seen how session attributes are set and recalled to allow the skill to remember things and give context to Yes and No answers.
 
-<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Breakfast.gif">
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/BreakfastTitle.gif">
 
 A skill may prompt the user for inputs early in the conversation, store the responses in session attributes, and use the values to look up data or perform an action.
 Game skills will keep track of user names, current scores, high scores, etc.
@@ -31,15 +54,13 @@ With Testflow, you can automate all ten answers, and have the option to pause th
 
 ### Note:
 Testflow is designed for human developers, and not for DevOps, CI/CD or as part of a build pipeline.
-Testflow runs on your laptop; it requires no Internet connection, and is perfect for developing while on a plane.
-It simply executes your Node.JS project (a local version of your Lambda code) with a sequence of events.
+Testflow runs on your laptop; it requires no Internet connection (and is perfect for developing while on a plane).
+It simply executes your code project (a local version of your Lambda code) with a sequence of events.
 
 Testflow is not tied to ASK SDK V2.
 It treats your code project like a black box, by simply sending in test events.
 Your code can be running alexa-sdk V1, ask-sdk V2, or no SDK at all.
 
-
-<img src="https://m.media-amazon.com/images/G/01/cookbook/testflow_default._TTH_.png" alt="TestFlow" width="411" height="245">
 
 **```testflow.js```** is itself a Node.JS Javascript script designed to be run from the command line.  The script will access two other files:
  * Your ```src/index.js``` skill source code
@@ -86,9 +107,6 @@ AMAZON.StopIntent
   + You should see request and Intents, slot values, session attributes, and output speech.
 
 
-<img src="https://m.media-amazon.com/images/G/01/cookbook/testflow1._TTH_.png" alt="TestFlow" width="346" height="288">
-
-
 #### Customizing the output
 At the top of the ```testflow.js``` file, notice a set of options you can define.
 You may change any of these to ```true``` or ```false```.
@@ -121,8 +139,6 @@ const options = {
 #### AWS Calls
 If your code makes calls to AWS Services such as S3 or DynamoDB, you should be able to test these from your local command prompt, too.
 Be sure you have the [AWS-SDK](./tutorial/SETUP.md) installed and the AWS CLI (command line interface) [installed](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configured](https://developer.amazon.com/blogs/post/Tx1UE9W1NQ0GYII/publishing-your-skill-code-to-lambda-via-the-command-line-interface).
-You can even have your skill point to a [local endpoint](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) of DynamoDB for offline testing.
-
 
 #### Installation Steps
 The setup instructions are found here: [SETUP](./tutorial/SETUP.md)

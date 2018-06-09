@@ -6,8 +6,8 @@
 // node testflow mydialog.txt
 const fs = require("fs");
 
-const SourceCodeFile = './sampleskill/index.js';
-const handlerName =  'handler'; //'lambda_handler'
+const SourceCodeFile = './sampleskill3/index.py';
+const handlerName =  'lambda_handler'; //'lambda_handler'
 
 
 let MyDialog = './dialogs/default.txt';
@@ -20,11 +20,11 @@ if (process.argv[2]) {
 const options = {
     delay        : 2.0,     // seconds between requests
     stdout       : true,    // standard output, show any errors or console.log() messages
-    attributes   : true,   // true, false, or a string with the name of an attribute such as 'history'
+    attributes   : true,   // true, false, or a string with the name of an attribute such as 'history' or 'favoriteColor'
     speechOutput : true,
     reprompt     : false,
     slots        : true,
-    cards        : true,
+    cards        : false,
     userId       : '123',  // final 3 chars of test user Id, can be overridden
     timestamp    : ''      // defaults to now, can set via '2018-04-03T21:47:49Z'
     // , requestEvent : false,    // show the request JSON sent to your code

@@ -147,7 +147,7 @@ def on_intent(intent_request, session):
     """ Called when the user specifies an intent for this skill """
 
     # print("on_intent requestId=" + intent_request['requestId'] + ", sessionId=" + session['sessionId'])
-    print("print comment from intent ", intent_request['intent']['name'])
+    # print("print comment from intent ", intent_request['intent']['name'])
 
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']

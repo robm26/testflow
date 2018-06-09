@@ -1,6 +1,7 @@
 ## Testflow Tutorial
 
-Welcome!  This guide will walk you through all the features of Testflow using two included sample skill projects.
+Welcome!  This guide will walk you through all the features of Testflow.
+After completing the tutorial, you will know a new way to rapidly build and test skill code.
 
 First, be sure Testflow is installed: see [SETUP](./SETUP.md)
 
@@ -13,9 +14,27 @@ Open up the testflow project folder in your favorite code editor or text editor.
 We will be modifying ```testflow.js```, the code at ```skillsample/index.js```, and the sequence text files within ```/dialogs/```.
 
 Open up a commmand prompt (black background is recommended),
-change into the root testflow directory, and type ```node testflow```
+change into the root testflow directory, and type
 
-### Choose Test
+```
+node testflow
+```
+
+This runs three default test events from the file [dialogs/default.txt](../dialogs/default.txt) :
+
+```
+LaunchRequest
+AMAZON.HelpIntent
+AMAZON.StopIntent
+```
+
+Notice, we are not testing with the full phrase or utterances that a human might say, nor are we typing in questions like a chatbot.
+Testflow simulates the same Intents and Slots that the Alexa service will send to your code.
+Assume the Skill and Alexa service have already processed the audio,
+and selected an Intent (and slot values) according to the language model of your skill.
+
+
+### Choose a Test
 1. Type ```node testflow breakfast.txt```
 1. Type ```node testflow lunch.txt``` You will get an error.
 1. Create a new file in /dialogs called lunch.txt with Requests & Intents similar to breakfast.txt
@@ -40,16 +59,11 @@ change into the root testflow directory, and type ```node testflow```
 
   * Pay close attention to the session attributes in magenta.  A design goal of Testflow is to allow you to easily view these memory values as the skill progresses.
 
----
-
-### Slots
-1. Run ```node testflow attraction.txt```
-You should see a slot key:value pair in blue and green.
-1. Modify attraction.txt by inserting a question-mark ? at the beginning of the AttractionIntent line.
 
 ---
 
 ### Slots
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/attractionslot.png">
 1. Run ```node testflow attraction.txt```
 You should see a slot key:value pair in blue and green.
 1. Modify attraction.txt by changing the slot value from 4 to 2, and re-run the test.
@@ -59,14 +73,17 @@ You should see a slot key:value pair in blue and green.
 ---
 
 ### Prompt for Slot
+
 You can make Testflow pause and collect a slot value from the user.
 1. Modify attraction.txt by adding a question mark before the Intent name:
 
    *  ```? AttractionIntent distance=2```
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/AttractionPrompt.gif">
+
 1. Re-run the test, and you should be prompted to either accept the default value, or enter a new value.
 Type in 40 and press enter.
 
-<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/AttractionPrompt.gif">
 
 This will cause the script to pause and give you a chance to type in a value.
 1. Run ```node testflow attraction.txt``` again.
@@ -84,15 +101,18 @@ You can type in "40" and the skill will execute with this new value.  You may se
 ---
 
 ### Debugging
+
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Dinner.gif">
+
 1. Run ```node testflow dinner.txt```
 1. The error is caught and displayed in white text.
 1. Open sampleskill/index.js and find the word "unicorn" and comment it out.
 
-<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Dinner.gif">
 
 ---
 
 ### Skipping Lines
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/comment.png">
 1. Run ```node testflow coffee.txt```
 1. Notice the final line is an AMAZON.YesIntent, but the skill doesn't understand.
   * The skill has ended with the first YES.  You can see double-dashed lines (=====) indicating the skill session has ended.
@@ -101,20 +121,25 @@ The next YES is running under a brand new session.
 1. You could also insert a new line with just the word ```end``` in order to skip any remaining lines.
 
 ---
+---
 
+### Advanced Topics
 
-### Skill Sample 2 Setup
+#### Redirect Testflow to run Skill Sample 2
+
 1. Right at the top of testflow.js, update source code reference to point to sample #2:
 ```const MyLambdaFunction = require('./sampleskill2/index.js');```
 
 This skill is more complex; be sure you have setup and configured the AWS CLI and AWS SDK
 as recommended in the [SETUP](./tutorial/SETUP.md) steps.
 
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/dynamodb_sm.png">
+
 The skill uses a feature of the ask-sdk to auto-create a DynamoDB table for you, called ```askMemorySkillTable```.
 
 This table is used to store persistent attributes so the skill can remember each user even after the session ends.
 
-<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/dynamodb_sm.png">
+Run ```node testflow color.txt```
 
 You may get an error the very first time you run a test; check your [AWS DynamoDB Console](https://console.aws.amazon.com/dynamodb/home)
 to see if this table is still being created.  Once the table is created, it will remain, and the skill will add a new record for each new user.
@@ -125,27 +150,41 @@ to grant your CLI user (and Lambda role) access to DynamoDB, for example by atta
 
 ### Attributes
 1. Set the following options to false:
-  * options.reprompt
-  * options.cards
+
+```
+options.reprompt
+options.cards
+```
+
 1. Verify the following options are true:
-  * options.slots
-  * options.attributes
+
+```
+options.slots
+options.attributes
+```
+
 1. Run ```node testflow color.txt```
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Color.gif">
 
    * Wow, there are a lot of attributes being tracked! One of the attributes is called ```favoriteColor```.
 Let's focus in on that attribute only.  The options.attributes can be set to more than just a true/false boolean.
 1. Set options.attributes to the string 'favoriteColor'.
 1. Re-run ```node testflow color.txt```
 
+
 ### Entity Resolution Slots
 Now try ```node testflow colorsynonym.txt```
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/ColorSynonym.gif">
 
 In your skill's language model you can define a custom slot with just a list of your own values.
 In this simple case, your code would receive a slot value (or null) as part of the Intent.
 Even if the user were to say "unicorn", that value would be returned as the slot value (whether or not it exists in your custom slot values).
 
 If you create a custom slot AND define synonyms,
-then an advanced Alexa feature called [Entity Resolution](https://developer.amazon.com/blogs/alexa/post/5de2b24d-d932-4c6f-950d-d09d8ffdf4d4/entity-resolution-and-slot-validation) kicks in.
+then an Alexa Skills Kit feature called [Entity Resolution](https://developer.amazon.com/blogs/alexa/post/5de2b24d-d932-4c6f-950d-d09d8ffdf4d4/entity-resolution-and-slot-validation) kicks in.
+
 
 A user's slot utterance could now either:
  * Not be heard at all (Unfilled slot value)
@@ -156,23 +195,39 @@ A user's slot utterance could now either:
 We can simulate each of these cases in Testflow.
 ```
 MyColorSetIntent color=
-MyColorSetIntent color=red/red
+MyColorSetIntent color=green/green
 MyColorSetIntent color=crimson/red
 MyColorSetIntent color=unicorn/
 ```
 
+---
+
 ### Time dimension
-Now try ```node testflow time.txt```
+Sometimes we want to simulate a history of interactions prior to the current time.
+Testflow allows you to run your requests in the past (or future) by specifying a time offset.
+
+
+First, let's watch the timestamp attribute for each session.  Modify your options.attributes like so:
+
+ ```
+ attributes   : 'lastUseTimestamp',
+ ```
 
 The Alexa service (and AWS Lambda) operate on UTC time.  A current timestamp is included with each request to your code.
-Sometimes we want to simulate a history of interactions prior to the current time.
 
-Testflow allows you to run your requests in the past (or future) by specifying a time offset.
 For example, to specify six hours in the past,
 you can add a line to your sequence file with beginning with ```@``` and including a timespan to add to the current time.
 
 Timespans can be defined as minutes, hours, or days.
 To execute a request as of a week ago, you can add a line: ```@ -7d```
+
+All subsequent requests will operate from this time.
+
+Be sure your session ends with an AMAZON.StopIntent (or your code returns a .withShouldEndSession(true))
+in order for the timestamp to be set as the skill ends.
+
+Now try ```node testflow time.txt```
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Time.gif">
 
 ```
 @ -7d
@@ -189,40 +244,52 @@ LaunchRequest
 AMAZON.StopIntent
 ```
 
+---
+
 ### Different Users
-Now try ```node testflow colorusers.txt```
+Now try ```node testflow users.txt```
 
 Your published skill will be used by multiple users, each with a unique userId.
-Testflow can vary the userId to simulate different user sessions.  The ```userId``` field's
-last three characters can be set via a directive in the dialog sequence file.
+Testflow can vary the userId to simulate different user sessions.  The ```userId``` is a very long, random, anonymous string.
+The field's last three characters can be set via a directive in the dialog sequence file.
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Users.gif">
 
 ```
-~ 111
-LaunchRequest
-AMAZON.StopIntent
 ~ 222
 LaunchRequest
+MyColorSetIntent color=green
 AMAZON.StopIntent
 ~ 333
 LaunchRequest
+MyColorSetIntent color=red
+AMAZON.StopIntent
+~ 222
+LaunchRequest
+MyColorGetIntent
 AMAZON.StopIntent
 ```
 
-### Python
+---
+
+### Sample Skill 3 - Python
 Testflow supports testing Python code as well as Node.JS.
 The tool checks the extension of your source file, either .js or .py.
 For Python projects, a child process is spawned that executes the tests via Python.exe -c commands.
+This feature was tested with Python 2.7.
+
+   <img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Python.gif">
+
 Within testflow.js, search for // PYTHON to see the this code.
 
-
-Open up testflow.js and modify the location of your Python handler as shown here:
+Open up testflow.js and modify the location of your path, file, and handler exactly as shown here:
 
 ```
 const SourceCodeFile = './sampleskill3/index.py';
 const handlerName =  'lambda_handler';
 ```
 
-Now try ```node testflow colorusers.txt```
+Now try ```node testflow colorpython.txt```
 
 
 ### DynamoDB Local
@@ -232,7 +299,7 @@ you would need to have Internet access to AWS for Testflow to run your skill pro
 However, you could [setup a local instance of DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html),
 for enabling offline testing (like when traveling).
 
-Then, modify your code to define a new local DynamoDB client and specify it in your skill handler:
+Then, modify your skill code to define a new local DynamoDB client and specify it in your skill handler:
 
 ```
 const localDynamoClient = new AWS.DynamoDB({apiVersion : 'latest', endpoint : 'http://localhost:8000'});
@@ -247,4 +314,7 @@ exports.handler = skillBuilder
 
 ---
 
-Back [HOME](./README.md)
+That's all!  Happy skillbuilding!
+
+
+Back [HOME](../README.md)

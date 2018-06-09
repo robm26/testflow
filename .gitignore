@@ -62,3 +62,10 @@ typings/
 
 package-lock.json
 
+py.py
+sampleskill3/hello.pyc
+sampleskill3/index.pyc
+sampleskill3/pythonrunner.js
+sampleskill3/pythonrunner.py
+sampleskill3/src/
+sampleskill3/test.js

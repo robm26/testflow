@@ -175,7 +175,7 @@ const MyColorSetHandler = {
         }
 
         if( (slotValues.color.ERstatus === 'ER_SUCCESS_NO_MATCH') ||  (!slotValues.color.heardAs) ) {
-            slotStatus += 'A few valid values are, '
+            slotStatus += 'A few valid values from your custom slot are, '
                 // + 'red, blue, or green. ';
                 + helpers.sayArray(helpers.getExampleSlotValues('MyColorSetIntent','color'), 'or');
 
@@ -183,7 +183,9 @@ const MyColorSetHandler = {
 
         say += slotStatus;
 
-        sessionAttributes['favoriteColor'] = slotValues.color.resolved || slotValues.color.heardAs;
+        if(slotValues.color.ERstatus !== 'ER_SUCCESS_NO_MATCH') {
+            sessionAttributes['favoriteColor'] = slotValues.color.resolved || slotValues.color.heardAs;
+        }
 
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
