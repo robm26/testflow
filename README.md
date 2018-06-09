@@ -4,6 +4,10 @@ A command-line testing tool for Alexa skill code that simulates multi turn conve
 Developers seek to stay in the "Flow", a mental state where they are able to design and code rapidly.
 This tool is designed to streamline and simplify the development process for complex skill.
 
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Breakfast.gif">
+
+
+
 ### New Features
  * Entity Resolution slots
  * Time dimension

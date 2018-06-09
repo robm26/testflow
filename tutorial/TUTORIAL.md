@@ -181,9 +181,8 @@ const handlerName =  'lambda_handler';
 Now try ```node testflow colorusers.txt```
 
 
-
 ### DynamoDB Local
-If your skill uses Persistent attributes and DynamoDB,
+Testflow is designed to support offline development.  If your skill uses Persistent attributes and DynamoDB,
 you would need to have Internet access to AWS for Testflow to run your skill properly.
 
 However, you could [setup a local instance of DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html),
