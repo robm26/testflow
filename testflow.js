@@ -6,8 +6,8 @@
 // node testflow mydialog.txt
 const fs = require("fs");
 
-const SourceCodeFile = './sampleskill3/index.py';
-const handlerName =  'lambda_handler'; //'lambda_handler'
+const SourceCodeFile = './sampleskill/index.js';
+const handlerName =  'handler'; //'lambda_handler'
 
 
 let MyDialog = './dialogs/default.txt';
@@ -18,9 +18,9 @@ if (process.argv[2]) {
 
 // Toggle on or off various debugging outputs
 const options = {
-    delay        : 2.0,     // seconds between requests
+    delay        : 1.0,     // seconds between requests
     stdout       : true,    // standard output, show any errors or console.log() messages
-    attributes   : true,   // true, false, or a string with the name of an attribute such as 'history' or 'favoriteColor'
+    attributes   : false,   // true, false, or a string with the name of an attribute such as 'history' or 'favoriteColor'
     speechOutput : true,
     reprompt     : false,
     slots        : true,
