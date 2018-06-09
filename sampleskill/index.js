@@ -392,12 +392,12 @@ const data = {
         {
             name: 'Good Harbor Beach',
             description: 'Facing the Atlantic Ocean, Good Harbor Beach has huge expanses of soft white sand that attracts hundreds of visitors every day during the summer.',
-            distance: '2',
+            distance: '3',
         },
         {
             name: 'Rockport',
             description: 'A quaint New England town, Rockport is famous for rocky beaches, seaside parks, lobster fishing boats, and several art studios.',
-            distance: '4',
+            distance: '5',
         },
         {
             name: 'Fenway Park',

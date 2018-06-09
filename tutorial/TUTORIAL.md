@@ -2,7 +2,7 @@
 
 Welcome!  This guide will walk you through all the features of Testflow using two included sample skill projects.
 
-First, be sure Testflow is installed: see [SETUP.md](./SETUP.md)
+First, be sure Testflow is installed: see [SETUP](./SETUP.md)
 
 We will be testing against the two included Node.JS sample skill code projects in
 [sampleskill](../sampleskill) and
@@ -22,44 +22,77 @@ change into the root testflow directory, and type ```node testflow```
 1. Run testflow again with your new file.
 
 ### Delay
-1. Within testflow.js, change the options.delay to 4 seconds.
+1. Within testflow.js, change the ```options.delay``` to 4 seconds.
 1. Rerun the test.  You now have time to read the responses from your Alexa skill.
 
 ### Customized Output
 
 1. Set the following options to true:
+
+```
   * options.speechOutput
   * options.reprompt
   * options.attributes
   * options.cards
+```
+
 1. Run ```node testflow breakfast.txt```
 
   * Pay close attention to the session attributes in magenta.  A design goal of Testflow is to allow you to easily view these memory values as the skill progresses.
 
-### Basic Slots
+---
+
+### Slots
 1. Run ```node testflow attraction.txt```
 You should see a slot key:value pair in blue and green.
 1. Modify attraction.txt by inserting a question-mark ? at the beginning of the AttractionIntent line.
+
+---
+
+### Slots
+1. Run ```node testflow attraction.txt```
+You should see a slot key:value pair in blue and green.
+1. Modify attraction.txt by changing the slot value from 4 to 2, and re-run the test.
+
+   *  ```AttractionIntent distance=2```
+
+---
+
+### Prompt for Slot
+You can make Testflow pause and collect a slot value from the user.
+1. Modify attraction.txt by adding a question mark before the Intent name:
+
+   *  ```? AttractionIntent distance=2```
+1. Re-run the test, and you should be prompted to either accept the default value, or enter a new value.
+Type in 40 and press enter.
+
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/AttractionPrompt.gif">
+
 This will cause the script to pause and give you a chance to type in a value.
 1. Run ```node testflow attraction.txt``` again.
 You can type in "40" and the skill will execute with this new value.  You may see an attraction a little farther away!
 
-  * The real Alexa service would attempt to fill this slot with a valid AMAZON.NUMBER value.  If you were to utter "unicorn", the Alexa service would only this slot with simply "?"
+  * Assume the skill is listening for the built-in slot type: AMAZON.NUMBER; in this case you would receive either an integer, or empty slot, or "?"
 
+---
 
 ### Calling Web Services & APIs
 1. Run ```node testflow outside.txt```
-  * The skill attempts a live call to a Yahoo API to get the current weather.
+  * The code within the sample skill attempts a live call to a Yahoo API to get the current weather.
   As long as your laptop has Internet access, you should be able to execute the test and see the results.
+
+---
 
 ### Debugging
 1. Run ```node testflow dinner.txt```
 1. The error is caught and displayed in white text.
 1. Open sampleskill/index.js and find the word "unicorn" and comment it out.
 
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Dinner.gif">
 
+---
 
-### Misc
+### Skipping Lines
 1. Run ```node testflow coffee.txt```
 1. Notice the final line is an AMAZON.YesIntent, but the skill doesn't understand.
   * The skill has ended with the first YES.  You can see double-dashed lines (=====) indicating the skill session has ended.
@@ -67,17 +100,28 @@ The next YES is running under a brand new session.
 1. Open coffee.txt and comment out the final line with a pound sign: ```# AMAZON.YesIntent```
 1. You could also insert a new line with just the word ```end``` in order to skip any remaining lines.
 
+---
+
 
 ### Skill Sample 2 Setup
 1. Right at the top of testflow.js, update source code reference to point to sample #2:
 ```const MyLambdaFunction = require('./sampleskill2/index.js');```
 
-This skill is more complex; be sure you have setup the AWS CLI and AWS SDK as recommended in the [SETUP](./tutorial/SETUP.md) steps.
+This skill is more complex; be sure you have setup and configured the AWS CLI and AWS SDK
+as recommended in the [SETUP](./tutorial/SETUP.md) steps.
+
 The skill uses a feature of the ask-sdk to auto-create a DynamoDB table for you, called ```askMemorySkillTable```.
+
 This table is used to store persistent attributes so the skill can remember each user even after the session ends.
-If you get errors, check your [AWS DynamoDB Console](https://console.aws.amazon.com/dynamodb/home) to see if this table is still being created.
+
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/dynamodb_sm.png">
+
+You may get an error the very first time you run a test; check your [AWS DynamoDB Console](https://console.aws.amazon.com/dynamodb/home)
+to see if this table is still being created.  Once the table is created, it will remain, and the skill will add a new record for each new user.
+
 You may need to visit the [IAM Console](https://console.aws.amazon.com/iam/home)
 to grant your CLI user (and Lambda role) access to DynamoDB, for example by attaching the ```AmazonDynamoDBFullAccess``` policy.
+
 
 ### Attributes
 1. Set the following options to false:
@@ -200,3 +244,7 @@ exports.handler = skillBuilder
 .withTableName(DYNAMODB_TABLE)
 .withDynamoDbClient(localDynamoClient)
 ```
+
+---
+
+Back [HOME](./README.md)

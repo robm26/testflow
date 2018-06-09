@@ -4,9 +4,6 @@ A command-line testing tool for Alexa skill code that simulates multi turn conve
 Developers seek to stay in the "Flow", a mental state where they are able to design and code rapidly.
 This tool is designed to streamline and simplify the development process for complex skill.
 
-<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Breakfast.gif">
-
-
 
 ### New Features
  * Entity Resolution slots
@@ -19,6 +16,8 @@ See the [TUTORIAL](./tutorial/TUTORIAL.md)
 ### Overview
 Are you developing a conversational skill?  Maybe you are building a game, or a questionnaire, that requires several steps.
 You may have seen how session attributes are set and recalled to allow the skill to remember things and give context to Yes and No answers.
+
+<img align="right" src="https://s3.amazonaws.com/skill-images-789/tf/Breakfast.gif">
 
 A skill may prompt the user for inputs early in the conversation, store the responses in session attributes, and use the values to look up data or perform an action.
 Game skills will keep track of user names, current scores, high scores, etc.

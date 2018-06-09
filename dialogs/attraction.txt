@@ -1,3 +1,2 @@
 LaunchRequest
-AttractionIntent distance=3
-
+AttractionIntent distance=4

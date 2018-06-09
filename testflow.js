@@ -18,13 +18,13 @@ if (process.argv[2]) {
 
 // Toggle on or off various debugging outputs
 const options = {
-    delay        : 1.5,     // seconds between requests
+    delay        : 2.0,     // seconds between requests
     stdout       : true,    // standard output, show any errors or console.log() messages
     attributes   : true,   // true, false, or a string with the name of an attribute such as 'history'
     speechOutput : true,
     reprompt     : false,
     slots        : true,
-    cards        : false,
+    cards        : true,
     userId       : '123',  // final 3 chars of test user Id, can be overridden
     timestamp    : ''      // defaults to now, can set via '2018-04-03T21:47:49Z'
     // , requestEvent : false,    // show the request JSON sent to your code
@@ -48,9 +48,9 @@ if (SourceCodeFile.slice(-2).toLowerCase()  === 'py') {
 }
 
 
-console.log();
+// console.log();
 // console.log('================================================================================');
-console.log('Running testflow with dialog sequence file : ', MyDialog);
+console.log('Running testflow on ' + SourceCodeFile + ' using dialog sequence file ', MyDialog);
 console.log();
 
 const OriginalConsoleLog = console.log;
@@ -122,6 +122,7 @@ let context = { // lambda functions may finish by calling context.succeed OR the
                         cardWidth = cardContentLines[i].length;
                     }
                 }
+                console.log();
                 linePadding = (cardWidth < cardTitle.length ? 0 : cardWidth - cardTitle.length);
                 console.log('\x1b[44m\x1b[4m\x1b[37m%s\x1b[0m\x1b[0m ', cardTitle + ' '.repeat(linePadding));
 
@@ -158,7 +159,7 @@ let context = { // lambda functions may finish by calling context.succeed OR the
 
 
         if (data.response.shouldEndSession || typeof data.response.shouldEndSession === 'undefined') {
-            console.log('================================================================\n');
+            console.log('================================================================');
             newSession = true; // for next time
         } else {
             console.log('----------------------------------------------------------------\n');
