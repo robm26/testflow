@@ -6,7 +6,12 @@
 // node testflow mydialog.txt
 const fs = require("fs");
 
-const SourceCodeFile = './sampleskill/index.js';
+SourceCodeFile = './sampleskill/index.js';
+
+if (fs.existsSync('./src/index.js')) {
+	SourceCodeFile = '../src/index.js';
+}
+
 const handlerName =  'handler'; //'lambda_handler'
 
 
